@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miracle.mybatis.mapper.UserMapper">
+
+    <select id="selectByUserId" parameterType="long" resultType="user">
+        select * from base_user where user_id = #{id};
+    </select>
+
+    <select id="selectAllOrderByUserIdDesc" resultType="user">
+        select * from base_user order by user_id desc;
+    </select>
+
+<!--    <insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyColumn="user_id">-->
+<!--        insert into base_user (user_name,remarks)-->
+<!--        values (#{userName},#{remarks})-->
+<!--    </insert>-->
+</mapper>

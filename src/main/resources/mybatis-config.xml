@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--属性设置：引用db-config.properties配置-->
+    <properties resource="db-config.properties">
+        <!--
+        如果一个属性在不只一个地方进行了配置，那么，MyBatis 将按照下面的顺序来加载：
+        (1)首先读取在 properties 元素体内指定的属性。
+        (2)然后根据 properties 元素中的 resource 属性读取类路径下属性文件，或根据 url 属性指定的路径读取属性文件，并覆盖之前读取过的同名属性。
+        (3)最后读取作为方法参数传递的属性，并覆盖之前读取过的同名属性。
+        -->
+        <!--因此下面配置的username和password将被db-config.properties文件中配置的username和password值覆盖-->
+        <property name="username" value="root1"/>
+        <property name="password" value="root1"/>
+        <!-- 启用默认值特性 -->
+        <!--下面这个配置开启后可以启动默认值的配置，其他地方引用属性时可以设置默认值,例如：value="${username:ut_user}"-->
+        <property name="org.apache.ibatis.parsing.PropertyParser.enable-default-value" value="true"/>
+        <!-- 修改默认值的分隔符 -->
+        <!--
+        如果你在属性名中使用了 ":" 字符（如：db:username），或者在 SQL 映射中使用了 OGNL 表达式的三元运算符
+        （如： ${tableName != null ? tableName : 'global_constants'}），就需要设置特定的属性来修改分隔属性名和默认值的字符。
+        如下所示：使用'?:'作为默认值的分隔符
+        -->
+        <property name="org.apache.ibatis.parsing.PropertyParser.default-value-separator" value="?:"/>
+    </properties>
+
+    <!--设置-->
+    <settings>
+        <!--开启驼峰命名自动映射-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--允许 JDBC 支持自动生成主键: 如果设置为 true，将强制使用自动生成主键-->
+        <setting name="useGeneratedKeys" value="true"/>
+        <!--配置默认的执行器-->
+        <!--SIMPLE 就是普通的执行器；REUSE 执行器会重用预处理语句（PreparedStatement）； BATCH 执行器不仅重用语句还会执行批量更新。-->
+        <!--这里使用REUSE执行器，执行update或select，以sql作为key查找Statement对象，存在就使用，不存在就创建，
+        用完后，不关闭Statement对象，而是放置于Map内，供下一次使用。简言之，就是重复使用Statement对象-->
+        <setting name="defaultExecutorType" value="REUSE"/>
+        <!--设置超时时间，它决定数据库驱动等待数据库响应的秒数。-->
+        <setting name="defaultStatementTimeout" value="30"/>
+        <!--为驱动的结果集获取数量（fetchSize）设置一个建议值。此参数只可以在查询设置中被覆盖。设置建议返回结果集的大小-->
+        <setting name="defaultFetchSize" value="100"/>
+        <!--当返回行的所有列都是空时，MyBatis默认返回 null。 当开启这个设置时，MyBatis会返回一个空实例。-->
+        <setting name="returnInstanceForEmptyRow" value="false"/>
+        <!--全局性地开启或关闭所有映射器配置文件中已配置的任何缓存。默认值true-->
+        <setting name="cacheEnabled" value="true"/>
+    </settings>
+
+    <!--别名设置-->
+    <typeAliases>
+        <package name="com.miracle.mybatis.entity"/>
+    </typeAliases>
+    
+    <!--环境配置：默认使用开发环境-->
+    <environments default="development">
+        <!--开发环境-->
+        <environment id="development">
+            <!--使用JDBC事务管理-->
+            <transactionManager type="JDBC"/>
+            <!--POOLED:使用数据库连接池-->
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--映射器配置-->
+    <mappers>
+        <!--XML映射器配置：-->
+        <mapper resource="mapper/UserMapper.xml"/>
+        <!--接口映射器配置：将包内的所有接口映射器配置注册到Mapper中-->
+        <!--<package name="com.miracle.mybatis.demo.mapper"/>-->
+    </mappers>
+
+</configuration>
